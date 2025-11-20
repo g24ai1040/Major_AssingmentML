@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlops-olivetti-deployment
+  labels:
+    app: mlops-olivetti
+spec:
+  replicas: 3     # REQUIRED in your assignment
+  selector:
+    matchLabels:
+      app: mlops-olivetti
+  template:
+    metadata:
+      labels:
+        app: mlops-olivetti
+    spec:
+      containers:
+        - name: mlops-olivetti
+          image: g24ai1040/g24ai1040_major:latest   # your Docker Hub image
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
